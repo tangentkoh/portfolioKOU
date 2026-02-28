@@ -1,9 +1,11 @@
 /* 変数設定 */
 :root {
-  --bg-color: #f4f1ea; /* 紙のような少し黄みのある白 */
+  --bg-color-base: #f4f1ea; /* ベースの紙色 */
   --text-color: #1a1a1a;
-  --accent-color: #d32f2f; /* 差し色の赤 */
+  --accent-color: #d32f2f;
   --font-serif: "Playfair Display", "Noto Serif JP", serif;
+  /* 新規追加：テクスチャ画像（透過PNGやSVGのノイズ） */
+  --paper-texture: url("../assets/paper-noise.png"); /* 準備が必要 */
 }
 
 * {
@@ -13,11 +15,20 @@
 }
 
 body {
-  background-color: var(--bg-color);
+  /* 修正：色とテクスチャを重ねる */
+  background-color: var(--bg-color-base);
+  background-image: var(--paper-texture);
+  background-repeat: repeat;
+  background-size: auto; /* ノイズは等倍で */
+
   color: var(--text-color);
   font-family: var(--font-serif);
   line-height: 1.6;
   overflow-x: hidden;
+
+  /* 文字の可読性を上げる（雑誌風の少しレトロな掠れ感を出す） */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* 雑誌の表紙風レイアウト */
@@ -31,13 +42,31 @@ body {
   padding: 2rem;
   border: 10px solid var(--text-color); /* 枠線をつけると雑誌の表紙感が出る */
   margin: 20px;
+  position: relative;
 }
 
 .main-title {
-  font-size: clamp(3rem, 15vw, 10rem);
-  line-height: 0.8;
-  margin-bottom: 1rem;
-  letter-spacing: -0.05em;
+  font-size: clamp(4rem, 18vw, 12rem); /* さらに大きく */
+  font-weight: 700;
+  line-height: 0.85;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.07em; /* 極端に詰めるのが雑誌風 */
+  font-family: var(--font-serif);
+
+  /* アニメーションの追加：下からスッと出る */
+  animation: titleAppear 1.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes titleAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) skewY(5deg); /* 少し斜めに歪ませる */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) skewY(0deg);
+  }
 }
 
 /* アニメーションの準備：スクロールでふわっと出る */
@@ -50,4 +79,48 @@ body {
 .reveal.active {
   opacity: 1;
   transform: translateY(0);
+}
+
+.hero-text-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10; /* 画像の上に重ねる */
+  width: 90%;
+}
+
+.hero-image-wrapper {
+  width: 80%;
+  height: 90%;
+  overflow: hidden;
+  z-index: 5;
+  /* 雑誌風：あえて中心から少しずらす */
+  transform: translateX(10%);
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 枠いっぱいにトリミング */
+  filter: grayscale(30%) contrast(110%); /* 雑誌っぽい色調補正 */
+}
+
+.section {
+  position: relative;
+  padding: 10vh 10vw;
+  min-height: 80vh;
+}
+
+.section-title {
+  font-size: 5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+
+  /* 縦書きにして左端に配置 */
+  writing-mode: vertical-rl; /* 日本語の縦書き */
+  position: absolute;
+  left: 0;
+  top: 10vh;
+  color: var(--accent-color); /* 差し色を使う */
 }
