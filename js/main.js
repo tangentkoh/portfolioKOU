@@ -10,12 +10,12 @@ const revealObserver = new IntersectionObserver(
   { threshold: 0.1 },
 ); // 10%見えたら発火
 
-// .reveal がついたすべての要素（AboutやContactなど）を監視
+// .reveal がついたすべての要素を監視
 document.querySelectorAll(".reveal").forEach((el) => {
   revealObserver.observe(el);
 });
 
-// Works専用の遅延アニメーション（既存の処理を少し修正）
+// Works専用の遅延アニメーション
 const worksObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry, index) => {
@@ -47,7 +47,7 @@ form.addEventListener("submit", (e) => {
 
   setTimeout(() => {
     alert("MESSAGE SENT! (Thank you for your postage)");
-    // 実際はここでメール送信処理などを行う
+    // 実際はここでメール送信処理
     postcard.style.transform = "rotate(-1deg)";
     postcard.style.opacity = "1";
   }, 1500);
