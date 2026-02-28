@@ -16,3 +16,23 @@ const worksObserver = new IntersectionObserver(
 document.querySelectorAll(".work-item").forEach((item) => {
   worksObserver.observe(item);
 });
+
+const form = document.getElementById("contact-form");
+const postcard = document.querySelector(".postcard");
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  // 送信時のアニメーション
+  postcard.style.transition =
+    "transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 1s";
+  postcard.style.transform = "translateY(-100vh) rotate(10deg)";
+  postcard.style.opacity = "0";
+
+  setTimeout(() => {
+    alert("MESSAGE SENT! (Thank you for your postage)");
+    // 実際はここでメール送信処理などを行う
+    postcard.style.transform = "rotate(-1deg)";
+    postcard.style.opacity = "1";
+  }, 1500);
+});
