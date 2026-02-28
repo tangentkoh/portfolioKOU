@@ -1,9 +1,25 @@
-// スクロール監視のオプションを少し調整
+// スクロール監視の共通設定
+const revealObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("active");
+      }
+    });
+  },
+  { threshold: 0.1 },
+); // 10%見えたら発火
+
+// .reveal がついたすべての要素（AboutやContactなど）を監視
+document.querySelectorAll(".reveal").forEach((el) => {
+  revealObserver.observe(el);
+});
+
+// Works専用の遅延アニメーション（既存の処理を少し修正）
 const worksObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry, index) => {
       if (entry.isIntersecting) {
-        // インデックスに応じて少しずつ表示を遅らせる
         setTimeout(() => {
           entry.target.classList.add("active");
         }, index * 150);
